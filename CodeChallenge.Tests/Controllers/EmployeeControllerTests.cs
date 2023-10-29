@@ -4,36 +4,16 @@ using System.Net.Http;
 using System.Text;
 
 using CodeChallenge.Models;
-
 using CodeCodeChallenge.Tests.Integration.Extensions;
 using CodeCodeChallenge.Tests.Integration.Helpers;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace CodeCodeChallenge.Tests.Integration
+namespace CodeChallenge.Tests.Integration.Controllers
 {
     [TestClass]
-    public class EmployeeControllerTests
+    public class EmployeeControllerTests : BaseControllerTests
     {
-        private static HttpClient _httpClient;
-        private static TestServer _testServer;
-
-        [ClassInitialize]
-        // Attribute ClassInitialize requires this signature
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
-        public static void InitializeClass(TestContext context)
-        {
-            _testServer = new TestServer();
-            _httpClient = _testServer.NewClient();
-        }
-
-        [ClassCleanup]
-        public static void CleanUpTest()
-        {
-            _httpClient.Dispose();
-            _testServer.Dispose();
-        }
-
         [TestMethod]
         public void CreateEmployee_Returns_Created()
         {
@@ -101,7 +81,7 @@ namespace CodeCodeChallenge.Tests.Integration
             var putRequestTask = _httpClient.PutAsync($"api/employee/{employee.EmployeeId}",
                new StringContent(requestContent, Encoding.UTF8, "application/json"));
             var putResponse = putRequestTask.Result;
-            
+
             // Assert
             Assert.AreEqual(HttpStatusCode.OK, putResponse.StatusCode);
             var newEmployee = putResponse.DeserializeContent<Employee>();

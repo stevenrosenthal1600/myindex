@@ -41,8 +41,11 @@ namespace CodeChallenge.Config
 
         private void AddServices(IServiceCollection services)
         {
-
+            services.AddScoped<ICompensationService, CompensationService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<IReportsService, ReportsService>();
+
+            services.AddScoped<ICompensationRepository, CompensationRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRespository>();
 
             services.AddControllers();

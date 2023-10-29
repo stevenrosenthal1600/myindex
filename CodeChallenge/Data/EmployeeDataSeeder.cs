@@ -1,4 +1,5 @@
 ﻿using CodeChallenge.Models;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,13 +21,13 @@ namespace CodeChallenge.Data
 
         public async Task Seed()
         {
-            if(!_employeeContext.Employees.Any())
-            {
-                List<Employee> employees = LoadEmployees();
-                _employeeContext.Employees.AddRange(employees);
+            // preclude separate test classes from reusing the same in-memory database instance
+            _employeeContext.Database.EnsureDeleted();
 
-                await _employeeContext.SaveChangesAsync();
-            }
+            List<Employee> employees = LoadEmployees();
+            _employeeContext.Employees.AddRange(employees);
+
+            await _employeeContext.SaveChangesAsync();
         }
 
         private List<Employee> LoadEmployees()
